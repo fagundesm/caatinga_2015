@@ -1,0 +1,149 @@
+source("traits/R/Traits_caatinga.R")
+source ("experimento/R/rii.R")
+
+################################ ARRUMANDO TABELAS PARA ANÁLISE #################################################
+#Reshepando tabela de rii para poder fazer a regressão
+f <- rii_mt[1:4] #Selecionando somente o rri das folhas e variaveis categóricas
+fmelt <- dcast(f, plot + espnurse ~ target, value.var = "fol.mt.rii")
+fmelt<-arrange(fmelt, espnurse)
+
+#pegando somente as 3 réplicas que existem pra madeira também (em "f" econtram-se dados para as 5 réplicas)
+folhas.rii <- fmelt[c(1,4,5,7,9,10,13,14,15,17,19,20,21,22,24,27,28,30,31,34,35,36,38,40,41,42,43,46,48,49,51,54,55,
+             57,58,59,61,62,64,66,67,69,72,73,74,76,77,79,81,82,84,86,88,89,93,94,95,96,97,99),]
+
+traits$ID==copa$ID
+traits$especie==copa$especie
+
+
+#juntando tabelas de RII com traits
+reg <- cbind(traits, folhas.rii[,-c(1:2)])
+head(reg)
+
+###################################################|*|###########################################################
+
+# Regressão múltipla de cada target ~ traits com réplica (3) , sem interações 
+#regressão
+angico <-lm(angico ~ H_arvore_m + H_copa_m + diam_medio+  dens_mad+ 
+              cap_arm_mad+ efet_agua_mad + efet_agua_casca + thick_casca, reg)
+anova(angico)
+summary(angico)
+
+aroeira <-lm(aroeira ~ H_arvore_m + H_copa_m + diam_medio+  dens_mad+ 
+               cap_arm_mad+ efet_agua_mad + efet_agua_casca + thick_casca, reg)
+
+anova(aroeira)
+summary(aroeira)
+
+
+cating <-lm(cating~H_arvore_m + H_copa_m + diam_medio+  dens_mad+ 
+              cap_arm_mad+ efet_agua_mad + efet_agua_casca + thick_casca, reg)
+anova(cating)   
+summary(cating)
+
+######### teste de normalidade de resíduos / assumptions of lm # OK
+plot(angico)   
+plot(aroeira)
+plot(cating)
+hist(cating$residuals)
+hist(angico$residuals)
+hist(aroeira$residuals)
+shapiro.test(cating$residuals)
+shapiro.test(angico$residuals)
+shapiro.test(aroeira$residuals)
+
+############################################################################################33
+
+with(dados, cor(cbind(angico,cap_arm_mad, dens_mad, efet_agua_mad,
+                      efet_agua_casca, cap_arm_casca)))
+
+with(dados, cor(cbind(cating,cap_arm_mad,H_copa,diam_copa, dens_mad, 
+                      efet_agua_mad, efet_agua_casca, thick_casca,cap_arm_casca)))
+
+with(dados, cor(cbind(aroeira,cap_arm_mad,H_copa_m,diam_copa, dens_mad, 
+                      efet_agua_mad, efet_agua_casca, thick_casca,cap_arm_casca)))[,1]
+
+plot( angico~ efet_agua_casca, dados)
+plot( cating~ efet_agua_casca, dados)
+plot( aroeira~ efet_agua_casca, dados)
+plot( aroeira~ efet_agua_mad, dados)
+
+
+
+
+
+#Regressão multipla com réplica de trais e média de nurse# 18/02/15
+##depois da reunião com a GIs, ela pediu pra eu fazer a média de facilitação POR NURSE (das 3 targets) e utilizar
+#o modelo cheio de todos os traits importantes que são: 
+#H_arvore, diam_copa, dens_mad, dens_casca, cap_arm_mad, cap_arm_casca, efet_agua_mad, efet_agua_casca, thick_casca
+
+#PARA FAZER ESTA ANÁLISE EU TENHO QUE JUNTAS AS MÉDIAS DA TABELA TRAITS.MED COM OS DADOS rii.mean
+
+reg0 <-lm() ~  H_arvore + H_copa + diam_copa+  dens_mad+ 
+            cap_arm_mad+ efet_agua_mad + efet_agua_casca + thick_casca, dados)
+anova(reg0)
+summary(reg0)
+#Seleção de modelos
+reg1<- update(reg0, . ~ . - diam_copa)
+anova(reg1)
+summary(reg1)
+
+anova(reg0,reg1) #se não for significativo eu posso retirar as interações do modelo, se for eu tenho que deixa-las
+
+reg2 <- update(reg1, . ~. - H_arvore:diam_copa:cap_arm_mad:efet_agua_mad)
+anova(reg2)
+summary(reg2)
+
+anova(reg1,reg2)
+
+reg3 <- update(reg2, . ~.- H_arvore:diam_copa:dens_mad:cap_arm_mad )
+anova(reg3)                           
+summary(reg3)
+anova(reg2, reg3)
+
+reg4 <- update(reg3, ~. - dens_mad:cap_arm_mad:efet_agua_mad)
+anova(reg4)
+summary(reg4)
+anova(reg3,reg4)
+
+reg5 <- update (reg4, ~. - diam_copa:dens_mad:efet_agua_mad)
+anova(reg5)
+summary(reg5)
+anova(reg4,reg5)
+
+reg6 <- update(reg5, ~. - H_arvore:diam_copa:cap_arm_mad)
+anova(reg6)
+summary(reg6)
+anova(reg5,reg6)
+
+reg7<-  update(reg6,~. - diam_copa:dens_mad)
+anova(reg7)
+summary(reg7)
+
+reg8 <- update(reg7, ~. - dens_mad:cap_arm_mad ) #MINIMOMODELOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+anova(reg8)
+summary(reg8)
+
+#Regressão COM A MÉDIA DOS TRAITS e réplica por target# PRIMEIRA TENTATIVA
+# Fiz uma matriz de correlação com todas as variáveis,Estou excluindo as variáveis que são altamente correlacionadas (<0.6)
+# Restaram para eu utilizar os traits: " Mdens_mad,Mefet_agua_mad,MH_arvore,Mdiam_copa "
+media <- read.csv("data/traits_media.csv") 
+head(media)
+str(media)
+names(media)
+mat.cor <- cor(media[,c(14,20,22,23)])
+media_reg_mult <- select(media,rii,Mdens_mad,Mefet_agua_mad,MH_arvore,Mdiam_copa) #tabela com somente os traits para a regressão
+# Regressão múltipla
+mod0 <- lm(rii~Mdens_mad*Mefet_agua_mad*Mdiam_copa*MH_arvore, media_reg_mult)
+anova(mod0)
+summary (mod0)
+#seleçao dde modelos
+mod1 <- update(mod0, . ~ . - Mdens_mad:Mefet_agua_mad:Mdiam_copa:MH_arvore)
+anova(mod1)
+summary (mod1)
+mod2<- update(mod1, .~. - Mefet_agua_mad:Mdiam_copa:MH_arvore)
+anova(mod2)
+summary(mod2)
+mod3<- update(mod2, .~. - Mdens_mad:Mefet_agua_mad:Mdiam_copa)
+anova(mod3)
+
+
