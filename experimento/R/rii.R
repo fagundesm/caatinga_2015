@@ -1,8 +1,10 @@
 library(reshape2)
 library (dplyr)
+
+stderr <- function(x) sqrt(var(x,na.rm=TRUE)/length(na.omit(x)))
+
 brutos <- read.csv("experimento/dados_brutos_experimento.csv", h=T )
 brutos$plot <- as.factor(brutos$plot)
-
 # Somando 1 em todas as células (celulas com valor -1 passam a ter valor 0 - plântula morta)
 brutos[,-c(1:5)] <- brutos[,-c(1:5)] + 1  # Somando + 1 em todas as células
 range(brutos[,-c(1:3)],na.rm=T)        
@@ -34,12 +36,14 @@ fol.rii[fol.rii=="NaN"] <- 0
 #Média dos tempos
 fol_medt <- summarise(group_by(fol_wide, plot, espnurse,target),
                      fol.mt.rii=mean(RII),
-                     fol.sd.rii=sd(RII))
+                     fol.sd.rii=sd(RII),
+                     se.folmed=stderr(RII))
 
 #Média por nurse/target
 fol.rii.mean <- summarise(group_by(fol_medt, espnurse,target),
                       fol.rii.m=mean(fol.mt.rii),
-                      fol.rii.sd=sd(fol.mt.rii))
+                      fol.rii.sd=sd(fol.mt.rii),
+                     se.fol.rii =stderr(fol.mt.rii))
 
 #################################################|*|###########################################
 
@@ -102,6 +106,7 @@ rii_mt <- cbind(brutos[ ,c(1:3)], fol_medt[ ,-c(1:3)], alt_medt[ ,-c(1:3)], s.ri
 #Média nurse/target juntando plots/nurse
 rii_mean <- cbind (alt.rii.mean, fol.rii.mean[ ,-c(1:2)], s.rii.mean[ ,-c(1:2)])
 
+head(rii_mean)
 print("Objetos criados: rii_times = Indices para cada tempo | rii_mt = Média de todos os tempos |rii_mean = Média por nurse/target")
 
 ############################################ 
