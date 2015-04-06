@@ -11,34 +11,39 @@ fmelt<-arrange(fmelt, espnurse)
 folhas.rii <- fmelt[c(1,4,5,7,9,10,13,14,15,17,19,20,21,22,24,27,28,30,31,34,35,36,38,40,41,42,43,46,48,49,51,54,55,
              57,58,59,61,62,64,66,67,69,72,73,74,76,77,79,81,82,84,86,88,89,93,94,95,96,97,99),]
 
-traits$ID==copa$ID
-traits$especie==copa$especie
+#traits$ID==copa$ID
+#traits$especie==copa$especie
 
 
 #juntando tabelas de RII com traits
 reg <- cbind(traits, folhas.rii[,-c(1:2)])
-head(reg)
+reg$H_arvore_m <- as.numeric(reg$H_arvore_m)
+str(reg)
+summary(reg)
 
 ###################################################|*|###########################################################
 
 # Regressão múltipla de cada target ~ traits com réplica (3) , sem interações 
 #regressão
-angico <-lm(angico ~ H_arvore_m + H_copa_m + diam_medio+  dens_mad+ 
-              cap_arm_mad+ efet_agua_mad + efet_agua_casca + thick_casca, reg)
-anova(angico)
+
+angico <-aov(angico ~ H_arvore_m + H_copa_m + diam_medio +  dens_mad+ 
+              cap_arm_mad+ cont_agua_mad +cont_agua_casca + thick_casca + Error(especie), reg)
 summary(angico)
 
-aroeira <-lm(aroeira ~ H_arvore_m + H_copa_m + diam_medio+  dens_mad+ 
-               cap_arm_mad+ efet_agua_mad + efet_agua_casca + thick_casca, reg)
-
-anova(aroeira)
+aroeira <-aov(aroeira ~ H_arvore_m + H_copa_m + diam_medio+  dens_mad+ 
+               cap_arm_mad+ cont_agua_mad + cont_agua_casca + thick_casca+ Error(especie), reg)
 summary(aroeira)
 
 
-cating <-lm(cating~H_arvore_m + H_copa_m + diam_medio+  dens_mad+ 
-              cap_arm_mad+ efet_agua_mad + efet_agua_casca + thick_casca, reg)
-anova(cating)   
+cating <-aov(cating~H_arvore_m + H_copa_m + diam_medio+ dens_mad + 
+              cap_arm_mad+ cont_agua_mad + cont_agua_casca + thick_casca + Error(especie), reg)
 summary(cating)
+
+aov(cating ~ H_copa_m +Error(especie), reg )
+
+plot( reg$cating ~ reg$efet_agua_casca)
+plot(reg$cating ~ reg$H_arvore_m)
+
 
 ######### teste de normalidade de resíduos / assumptions of lm # OK
 plot(angico)   
@@ -53,13 +58,13 @@ shapiro.test(aroeira$residuals)
 
 ############################################################################################33
 
-with(dados, cor(cbind(angico,cap_arm_mad, dens_mad, efet_agua_mad,
+with(reg, cor(cbind(angico,cap_arm_mad, dens_mad, efet_agua_mad, thick_casca,
                       efet_agua_casca, cap_arm_casca)))
 
-with(dados, cor(cbind(cating,cap_arm_mad,H_copa,diam_copa, dens_mad, 
+with(reg, cor(cbind(cating,cap_arm_mad,H_copa,diam_copa, dens_mad, 
                       efet_agua_mad, efet_agua_casca, thick_casca,cap_arm_casca)))
 
-with(dados, cor(cbind(aroeira,cap_arm_mad,H_copa_m,diam_copa, dens_mad, 
+with(reg, cor(cbind(aroeira,cap_arm_mad,H_copa_m,diam_copa, dens_mad, 
                       efet_agua_mad, efet_agua_casca, thick_casca,cap_arm_casca)))[,1]
 
 plot( angico~ efet_agua_casca, dados)

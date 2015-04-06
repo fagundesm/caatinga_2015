@@ -1,5 +1,6 @@
 source("traits/R/Traits_caatinga.R")
 head(traits)
+summary(traits)
 ####################################################################################################
 ##############################                 Correlações                  ###########################
 #########################r###########################################################################
@@ -113,7 +114,7 @@ g4 <- ggplot(traits,aes(y=cap_arm_casca, x=especie))+
   geom_boxplot(aes(fill=factor(traits$especie)))
   #g4 <- g4 + theme(plot.margin = unit(c(1,1,-1, 1),"cm"))
 
-g13 <- ggplot(traits,aes(y=diam_copa, x=especie))+
+g13 <- ggplot(traits,aes(y=diam_medio, x=especie))+
   xlab("") + ylab("Canopy diameter [m]") +
   theme(axis.text.x = element_blank(),
   axis.title.y = element_text(size = rel(0.6), angle = 90))+
