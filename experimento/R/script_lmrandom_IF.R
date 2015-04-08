@@ -1,17 +1,15 @@
 library(lme4)
+library(reshape2)
 
 #Entrada de Dados
-source("experimento/R/rii.R")
+source("experimento/R/RII_prop.R")
 
-#separando somente as folhas
-tab<- rii_times[,1:11]
-
-#Reshapando a tabela para poder fazer a análise : )
-tabela <- melt(tab, id.vars = c("plot", "espnurse", "target"),
+tabela <- melt(rii.complete, id.vars = c("plot", "espnurse", "target"),
                variable.name = "tempo", 
                value.name = "folha")
 str(tabela)
 head(tabela)
+
 ##################### modelo linear (pode ser uma anova) com random effect sem p
 #Com log likelyhood ratio test: compara a diferença da deviance ( na tabela)
 #entre o modelo completo (rand) e os modelos sem variaveis (rand1, rand2, rand3) como se fosse seleção de modelos
