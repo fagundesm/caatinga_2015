@@ -1,5 +1,7 @@
 library(reshape2)
 library (dplyr)
+###########################################RII CALCULADO COM DADOS BRUTOS ##############################
+                                              # NÃO ESTAMOS TRABALHANDO #
 
 stderr <- function(x) sqrt(var(x,na.rm=TRUE)/length(na.omit(x)))
 

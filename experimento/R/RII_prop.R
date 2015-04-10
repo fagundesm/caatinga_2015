@@ -49,7 +49,7 @@ rii.values[rii.values=="NaN"] <- 0
 sum.rii <- rowSums(rii.values)
 
 rii.complete <- data.frame(mat[,1:3],rii.values)
-                    melt(rii.complete)
+                                        
 rii.tab <- data.frame(mat[,1:3],sum.rii)
 ################################################################################
 ############################## FIM #############################################
