@@ -2,7 +2,7 @@ library(reshape2)
 library(ggplot2)
 library(dplyr)
 source("experimento/R/RII_prop.R")
-
+sdErr <- function(x) sqrt(var(x,na.rm=TRUE)/length(na.omit(x)))
 #Média dos tempos
 rii.complete$medt <- rowSums(rii.complete[,-c(1:3)])/8
 rii.complete$plot <-as.factor(rii.complete$plot)
@@ -11,7 +11,7 @@ str(rii.complete)
 rii.tab <- summarise(group_by(rii.complete, espnurse, target),
           fol.nt.rii=mean(medt),
           fol.sd.rii=sd(medt),
-          se.fol.rii=stderr(medt))
+          se.fol.rii=sdErr(medt))
 
 #Plotando facilitação para folhas por nurse, ordem das barras manual
   sci<- c("S.macr","A.colu", "C. glaz","P.moni", "P.gard",

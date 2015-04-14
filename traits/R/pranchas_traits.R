@@ -63,72 +63,110 @@ sheetcor <- grid.arrange(g8,gr, g7,gx,g9,g10, ncol=2)
 ####################################################################################################
 #######################################      Gráficos     ##########################################
 ####################################################################################################
+sci<- c("S.macr","A.colu", "C. glaz","P.moni", "P.gard",
+        "E.numu", "P.marg", "L.ferr","B.chei", "P.stip",
+        "C.lepr","C.viti","M.tenu","C.lept","C.blan", 
+        "A.cear","C.hast","A.pyri", "S.tube","H.impe")
+
+
 g3 <- ggplot(traits,aes(y=dens_mad, x=especie))+
   xlab("") + ylab("Wood Density [g/cm³]") +
-  theme(axis.text.x = element_blank(),
+  theme(#axis.text.x = element_blank(),
         axis.title.y = element_text(size = rel(0.6), angle = 90))+
   guides(fill=FALSE)+
+  scale_x_discrete(limits=c ("burra", "angico","paubranco", "catanduva", "catingueira",
+                             "favelinha","imbiratanha","juca","mororo","jubranca",
+                             "mofumbo","algodao","jupreta","imburana","marmeleiro",
+                             "cumaru","feijao","pereiro","umbu","ipe"),labels = sci)+
   geom_boxplot(aes(fill=factor(traits$especie)))
   #g3 <- g3 + theme(plot.margin = unit(c(1,1,-1, 1),"cm"))
 
 g6 <- ggplot(traits,aes(y=dens_casca, x= especie))+
   xlab("") + ylab("Bark Density [g/cm³]") +
-  theme(axis.text.x = element_blank(),
+  theme(#axis.text.x = element_blank(),
   axis.title.y = element_text(size = rel(0.6), angle = 90))+
   guides(fill=FALSE)+
+  scale_x_discrete(limits=c ("burra", "angico","paubranco", "catanduva", "catingueira",
+                             "favelinha","imbiratanha","juca","mororo","jubranca",
+                             "mofumbo","algodao","jupreta","imburana","marmeleiro",
+                             "cumaru","feijao","pereiro","umbu","ipe"),labels = sci)+
   geom_boxplot(aes(fill=factor(traits$especie)))
   #g6 <- g6 + theme(plot.margin = unit(c(1,1,-1, 1),"cm"))
 
 g2 <- ggplot(traits,aes(y=cont_agua_mad, x= especie))+
    ylab("Wood Water content [%]") + xlab("") +
-  theme(axis.text.x = element_blank(),
+  theme(#axis.text.x = element_blank(),
   axis.title.y = element_text(size = rel(0.6), angle = 90))+
   guides(fill=FALSE)+
+  scale_x_discrete(limits=c ("burra", "angico","paubranco", "catanduva", "catingueira",
+                             "favelinha","imbiratanha","juca","mororo","jubranca",
+                             "mofumbo","algodao","jupreta","imburana","marmeleiro",
+                             "cumaru","feijao","pereiro","umbu","ipe"),labels = sci)+
   geom_boxplot(aes(fill=factor(traits$especie)))
   #g2 <- g2 + theme(plot.margin = unit(c(1,1,-1, 1),"cm"))
 
 g5 <- ggplot(traits,aes(y=cont_agua_casca, x=especie))+
    ylab("Bark Water Content[%]") + xlab("Specie")  +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1,size = 10),
+  theme(#axis.text.x = element_text(angle = 90, hjust = 1,size = 10),
   axis.title.y = element_text(size = rel(0.6), angle = 90), 
   axis.title.x = element_text(size = rel(1.0)))+
   guides(fill=FALSE)+
-  geom_boxplot(aes(fill=factor(traits$spp)))
+  scale_x_discrete(limits=c ("burra", "angico","paubranco", "catanduva", "catingueira",
+                             "favelinha","imbiratanha","juca","mororo","jubranca",
+                             "mofumbo","algodao","jupreta","imburana","marmeleiro",
+                             "cumaru","feijao","pereiro","umbu","ipe"),labels = sci)+
+  geom_boxplot(aes(fill=factor(traits$especie)))
   #g5 <- g5 + theme(plot.margin = unit(c(1,1,-1, 1),"cm"))
 
 sheetmad <- grid.arrange(g3,g6, g2,g5,g1,g4, ncol=3)
 
 g1 <- ggplot(traits,aes(  y=cap_arm_mad, x= especie))+
   ylab("Wood Storage Capacity[%]") + xlab ("")+
-  theme(axis.text.x = element_blank(),
+  theme(#axis.text.x = element_blank(),
   axis.title.y = element_text(size = rel(0.6), angle = 90))+
-  guides(fill=FALSE)
-+  geom_boxplot(aes(fill=factor(traits$especie)))
+  guides(fill=FALSE)+
+  scale_x_discrete(limits=c ("burra", "angico","paubranco", "catanduva", "catingueira",
+                             "favelinha","imbiratanha","juca","mororo","jubranca",
+                             "mofumbo","algodao","jupreta","imburana","marmeleiro",
+                             "cumaru","feijao","pereiro","umbu","ipe"),labels = sci)+
+ geom_boxplot(aes(fill=factor(traits$especie)))
   #g1 <- g1 + theme(plot.margin = unit(c(1,1,-1, 1),"cm"))
 
 g4 <- ggplot(traits,aes(y=cap_arm_casca, x=especie))+
   ylab("Bark Storage Capacity [%]") + xlab("") + 
-  theme(axis.text.x = element_blank(),
+  theme(#axis.text.x = element_blank(),
   axis.title.y = element_text(size = rel(0.6), angle = 90))+
   guides(fill=FALSE)+
+  scale_x_discrete(limits=c ("burra", "angico","paubranco", "catanduva", "catingueira",
+                             "favelinha","imbiratanha","juca","mororo","jubranca",
+                             "mofumbo","algodao","jupreta","imburana","marmeleiro",
+                             "cumaru","feijao","pereiro","umbu","ipe"),labels = sci)+
   geom_boxplot(aes(fill=factor(traits$especie)))
   #g4 <- g4 + theme(plot.margin = unit(c(1,1,-1, 1),"cm"))
 
 g13 <- ggplot(traits,aes(y=diam_medio, x=especie))+
   xlab("") + ylab("Canopy diameter [m]") +
-  theme(axis.text.x = element_blank(),
+  theme(#axis.text.x = element_blank(),
   axis.title.y = element_text(size = rel(0.6), angle = 90))+
   guides(fill=FALSE)+
+  scale_x_discrete(limits=c ("burra", "angico","paubranco", "catanduva", "catingueira",
+                             "favelinha","imbiratanha","juca","mororo","jubranca",
+                             "mofumbo","algodao","jupreta","imburana","marmeleiro",
+                             "cumaru","feijao","pereiro","umbu","ipe"),labels = sci)+
   geom_boxplot(aes(fill=factor(traits$especie)))
   #g13 <- g13 + theme(plot.margin = unit(c(1,1,-1, 1),"cm"))
 
 g14 <- ggplot(traits,aes(y=H_arvore_m, x=especie))+
-  xlab("Species") + ylab("Tree Height [m]") +
+  xlab("") + ylab("Tree Height [m]") +
   theme(axis.text.x = element_text(angle = 90, hjust = 1,size = 10),
-  axis.title.y = element_text(size = rel(0.6), angle = 90), 
-  axis.title.x = element_text(size = rel(1.0)))+
+  axis.title.y = element_text(size = rel(0.6), angle = 90)+ 
   guides(fill=FALSE)+
-  geom_boxplot(aes(fill=factor(traits$especie)))
+  scale_x_discrete(limits=c ("burra", "angico","paubranco", "catanduva", "catingueira",
+                             "favelinha","imbiratanha","juca","mororo","jubranca",
+                             "mofumbo","algodao","jupreta","imburana","marmeleiro",
+                             "cumaru","feijao","pereiro","umbu","ipe"),labels = sci)+
+   geom_boxplot(aes(fill=factor(traits$especie)))
+  
   #g14 <- g14 + theme(plot.margin = unit(c(1,1,-1, 1),"cm"))
 
 sheetcanopy <- grid.arrange(g13, g14, ncol=1)
