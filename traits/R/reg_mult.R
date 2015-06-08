@@ -1,11 +1,11 @@
 source("traits/R/Traits_caatinga.R")
-source ("experimento/R/rii.R")
+source ("experimento/R/RII_prop.R")
 
 ################################ ARRUMANDO TABELAS PARA ANÁLISE #################################################
 #Reshepando tabela de rii para poder fazer a regressão
-f <- rii_mt[1:4] #Selecionando somente o rri das folhas e variaveis categóricas
-fmelt <- dcast(f, plot + espnurse ~ target, value.var = "fol.mt.rii")
-fmelt<-arrange(fmelt, espnurse)
+f <- rii.complete[,-c(4:11)] #Selecionando somente o rri das folhas e variaveis categóricas
+fmelt <- dcast(f, plot + spnurse ~ target, value.var = "medt")
+fmelt<-arrange(fmelt, spnurse)
 
 #pegando somente as 3 réplicas que existem pra madeira também (em "f" econtram-se dados para as 5 réplicas)
 folhas.rii <- fmelt[c(1,4,5,7,9,10,13,14,15,17,19,20,21,22,24,27,28,30,31,34,35,36,38,40,41,42,43,46,48,49,51,54,55,

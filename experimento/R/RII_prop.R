@@ -50,6 +50,20 @@ sum.rii <- rowSums(rii.values)
 
 rii.complete <- data.frame(mat[,1:3],rii.values)
                                         
-rii.tab <- data.frame(mat[,1:3],sum.rii)
+                   
+                    
+                    #Média dos tempos
+                    rii.complete$medt <- rowSums(rii.complete[,-c(1:3)])/8
+                    rii.complete$plot <-as.factor(rii.complete$plot)
+                    str(rii.complete)
+                    head(rii.complete)
+                    
+                    #Média por nurse
+                    sdErr <- function(x) sqrt(var(x,na.rm=TRUE)/length(na.omit(x))) #formulinha pra calcular o sderr
+                    rii.tab <- summarise(group_by(rii.complete, spnurse, target),
+                                         fol.nt.rii=mean(medt),
+                                         fol.sd.rii=sd(medt),
+                                         se.fol.rii=sdErr(medt))
+                    
 ################################################################################
 ############################## FIM #############################################
