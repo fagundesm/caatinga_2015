@@ -1,4 +1,4 @@
-ID,especie,diam_madeira_mm,vol_mad,peso_seco_madeira,peso_fresco_mad,peso_sat_mad,diam_casca,diam2_casca,vol_casca,peso_seco_casca,peso_fresco_casca,peso_sat_casca
+plot,spnurse,diam_madeira_mm,vol_mad,peso_seco_madeira,peso_fresco_mad,peso_sat_mad,diam_casca,diam2_casca,vol_casca,peso_seco_casca,peso_fresco_casca,peso_sat_casca
 113,algodao,14.8,5.3,1.73,3.9,4.38,2.4,1.9,1.8,0.63,2,2.3
 156,algodao,22.6,6.4,1.74,3.7,4.91,2.5,1.5,1.4,0.6,1.4,1.8
 157,algodao,16.7,4.9,2.25,4.1,4.83,2.4,2.7,0.8,0.28,0.8,0.99
